@@ -1,16 +1,14 @@
 import styled from "styled-components";
 import { useState } from "react";
 
-import { match } from "../utils/regex";
+import { validateString, infixToPostfix } from "../utils/helperFuncs";
 
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
   const [formState, setFormState] = useState({
-    inputString: "abaaaabaaanbbbb",
-    patternString: "aba*+bbb*",
-    replacerString: "ccc",
+    expression: "(4+5)-2*(10*3)",
   });
   const [result, setResult] = useState("");
 
@@ -22,50 +20,26 @@ export default function Home() {
   };
 
   const handleSubmmit = () => {
-    setResult(
-      match(
-        formState.inputString,
-        formState.patternString,
-        formState.replacerString
-      )
-    );
+    // Check match here
   };
 
   return (
     <div className={styles.container}>
       <Head>
-        <title>Visualizing Regex</title>
+        <title>CFG Syntactic Analyzer</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>Visualizing Regex</h1>
+        <h1 className={styles.title}>CFG Syntactic Analyzer</h1>
 
         <InputsContainer>
           <InputDiv>
-            <p for="inputString">Input string:</p>
+            <p for="expression">Expression:</p>
             <input
               type="text"
-              name="inputString"
-              value={formState.inputString}
-              onChange={(e) => handleInputChange(e)}
-            />
-          </InputDiv>
-          <InputDiv>
-            <p for="patternString">Pattern to replace:</p>
-            <input
-              type="text"
-              name="patternString"
-              value={formState.patternString}
-              onChange={(e) => handleInputChange(e)}
-            />
-          </InputDiv>
-          <InputDiv>
-            <p name="replacerString">String to replace with:</p>
-            <input
-              type="text"
-              name="replacerString"
-              value={formState.replacerString}
+              name="expression"
+              value={formState.expression}
               onChange={(e) => handleInputChange(e)}
             />
           </InputDiv>
@@ -73,13 +47,13 @@ export default function Home() {
 
         <Button
           onClick={() => handleSubmmit()}
-          disabled={formState.inputString === ""}
+          disabled={formState.expression === ""}
         >
           Run
         </Button>
 
         <Result>
-          <h3>result:</h3>
+          <h3>Is it accepted by the language ___ ?</h3>
           <h1 className={styles.title}>{result}</h1>
         </Result>
       </main>
@@ -111,6 +85,8 @@ const InputDiv = styled.div`
   border: 2px solid #eaeaea;
   border-radius: 10px;
 
+  width: 100%;
+
   padding: 1rem 2rem;
 
   & > p {
@@ -123,6 +99,10 @@ const InputDiv = styled.div`
     border: none;
     font-size: 1.2rem;
 
+    text-align: center;
+
+    width: 100%;
+
     outline: none;
 
     border-bottom: 2px solid #eaeaea;
@@ -130,10 +110,7 @@ const InputDiv = styled.div`
 `;
 
 const InputsContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(4, auto);
-  grid-gap: 1.5rem;
-
+  width: 100%;
   margin-bottom: 1.5rem;
 `;
 
