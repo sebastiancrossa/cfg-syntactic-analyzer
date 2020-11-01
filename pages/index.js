@@ -1,5 +1,6 @@
-import styled from "styled-components";
 import { useState } from "react";
+import styled from "styled-components";
+import Latex from 'react-latex';
 
 import { validateString, infixToPostfix, constructTree } from "../utils/helperFuncs";
 
@@ -55,7 +56,7 @@ export default function Home() {
         </Button>
 
         <Result>
-          <h3>Is it accepted by the language ___ ?</h3>
+          <h3>Is it accepted by the language <Latex>$$S \rightarrow d |(S)|S+S|S-S|S*S|S/S $$</Latex>? (d = digit)</h3>
           <h1 className={styles.title}>{result ? "yes" : "no"}</h1>
           {result && <h3>Postfix expression: {infixToPostfix(formState.expression)}</h3>}
           {result && <pre>{JSON.stringify(constructTree(infixToPostfix(formState.expression)), null, 50)}</pre>}

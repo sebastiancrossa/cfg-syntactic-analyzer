@@ -12,9 +12,8 @@ const hasValidParentheses = s => {
   }
   let stack = [];
 
-  // Remove everything that's not a ( or )
+  // Quita todo que no sea un ( o )
   s = [...s].filter(s => s === "(" || s === ")").join("");
-  // console.log(s);
 
   for (let i = 0; i < s.length; i++) {
       if (mappedVals[s[i]]) stack.push(mappedVals[s[i]]);
@@ -24,13 +23,12 @@ const hasValidParentheses = s => {
   return stack.length === 0;
 }
 
-// http://csis.pace.edu/~wolf/CS122/infix-postfix.htm
+// Algoritmo de: http://csis.pace.edu/~wolf/CS122/infix-postfix.htm
 export const infixToPostfix = s => {
   let res = "";
   let stack = [];
 
   // Va de menor importancia a mayor importancia
-  // let nivelPresedencias = ["-", "+", "*", "/"];
   let nivelPresedencias = {
     "-": 1,
     "+": 1,
@@ -68,6 +66,7 @@ export const validateString = s => {
   if (s[0] === ")" || isValidOperand(s[0])) return false;
   if (s[s.length-1] === "(" || isValidOperand(s[s.length-1])) return false;
 
+  // Las condicionales se basan en la información de la tabla encontrada en el docuemnto de software
   for (let i = 1; i < s.length-1; i++) {
     let l = s[i-1],
         r = s[i+1],
