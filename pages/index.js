@@ -58,7 +58,7 @@ export default function Home() {
           <h3>Is it accepted by the language ___ ?</h3>
           <h1 className={styles.title}>{result ? "yes" : "no"}</h1>
           {result && <h3>Postfix expression: {infixToPostfix(formState.expression)}</h3>}
-          {result && <p>{JSON.stringify(constructTree(infixToPostfix(formState.expression)))}</p>}
+          {result && <pre>{JSON.stringify(constructTree(infixToPostfix(formState.expression)), null, 50)}</pre>}
         </Result>
       </main>
     </div>
