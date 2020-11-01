@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 
-import { validateString, infixToPostfix } from "../utils/helperFuncs";
+import { validateString, infixToPostfix, constructTree } from "../utils/helperFuncs";
 
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
@@ -10,7 +10,7 @@ export default function Home() {
   const [formState, setFormState] = useState({
     expression: "(4+5)-2*(10*3)",
   });
-  const [result, setResult] = useState("");
+  const [result, setResult] = useState(true);
 
   const handleInputChange = (e) => {
     setFormState({
@@ -20,7 +20,9 @@ export default function Home() {
   };
 
   const handleSubmmit = () => {
-    // Check match here
+    setResult(validateString(formState.expression));
+
+    console.log(validateString(formState.expression));
   };
 
   return (
@@ -54,7 +56,9 @@ export default function Home() {
 
         <Result>
           <h3>Is it accepted by the language ___ ?</h3>
-          <h1 className={styles.title}>{result}</h1>
+          <h1 className={styles.title}>{result ? "yes" : "no"}</h1>
+          {result && <h3>Postfix expression: {infixToPostfix(formState.expression)}</h3>}
+          {result && <p>{JSON.stringify(constructTree(infixToPostfix(formState.expression)))}</p>}
         </Result>
       </main>
     </div>

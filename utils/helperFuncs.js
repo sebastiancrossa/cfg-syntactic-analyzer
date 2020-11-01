@@ -1,3 +1,11 @@
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null;
+  }
+}
+
 const hasValidParentheses = s => {
   const mappedVals = {
     "(": ")"
@@ -56,8 +64,6 @@ export const validateString = s => {
 
   if (!hasValidParentheses(str)) return false;
 
-  console.log(s);
-
   // Checar valor inicial y final
   if (s[0] === ")" || isValidOperand(s[0])) return false;
   if (s[s.length-1] === "(" || isValidOperand(s[s.length-1])) return false;
@@ -66,13 +72,9 @@ export const validateString = s => {
     let l = s[i-1],
         r = s[i+1],
         curr = s[i];
-      
-    console.log(i, "curr: ", curr, typeof curr);
 
     // Valor actual es un operados valid
     if (isValidOperand(curr)) {
-      console.log("curr is op with: ", l, curr, r);
-
       if (l === ")" || isDigit(l) && r === "(" || isDigit(r)) {
         continue;
       } else {
@@ -82,8 +84,6 @@ export const validateString = s => {
 
     // Valor actual es un "("
     if (curr === "(") {
-      console.log("curr is ( with: ", l, curr, r);      
-
       if (isValidOperand(l) || l === "(" && isDigit(r) || r === "(") {
         continue;
       } else {
@@ -93,8 +93,6 @@ export const validateString = s => {
 
     // Valor actual es un ")"
     if (curr === ")") {
-      console.log("curr is ) with: ", l, curr, r);
-
       if (l === ")" || isDigit(l) && isValidOperand(r) || r === ")") {
         continue;
       } else {
@@ -104,8 +102,6 @@ export const validateString = s => {
 
     // Valor actual es un digito
     if (isDigit(curr)) {
-      console.log("curr is digit with: ", l, curr, r);
-
       if (isValidOperand(l) || l === "(" || isDigit(l) && isValidOperand(r) || r === ")" || isDigit(r)) {
         continue;
       } else {
@@ -115,6 +111,28 @@ export const validateString = s => {
   }
 
   return true;
+}
+
+// Construye el arbol con base a la expresion posfija
+export const constructTree = postFixStr => {
+  const stringArr = [...postFixStr];
+  const stack = [];
+
+  for (const val of stringArr) {
+    // Es un numero
+    if (parseInt(val)) {
+      const newNode = new Node(val);
+      stack.push(newNode);
+    } else {
+      // Es un operador
+      const newNode = new Node(val);
+      newNode.right = stack.pop()
+      newNode.left = stack.pop();
+      stack.push(newNode);
+    }
+  }
+
+  return stack.pop();
 }
 
 const isValidOperand = char => ["*", "-", "+", "/"].includes(char);
